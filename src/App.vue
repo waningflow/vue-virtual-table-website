@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <TestPlain></TestPlain>
-    <div style="width: 1200px;margin: auto;">
+    <div style="width: 1000px;margin: auto;">
       <div style="margin: 20px 0">
         <el-card>
           <el-form :inline="true" class="demo-form-inline"">
