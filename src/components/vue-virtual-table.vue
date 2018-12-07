@@ -19,6 +19,7 @@
 													</el-option>
 												</el-select>
 											</el-input>
+
 											<i class="el-icon-circle-close-outline" style="position:relative; top: 0px" v-show="ph_index > 0" @click="removePhraseFilter(configIndex, ph_index)"></i>
 										</template>
 										<div style="display: flex">
