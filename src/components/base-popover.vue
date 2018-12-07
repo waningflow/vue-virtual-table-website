@@ -1,6 +1,6 @@
 <template>
-	<div style="display: inline-block;">
-		<transition name="slidedown">
+	<span>
+		<transition :name="animationMode">
 			<div class="pop-card" v-if="isShow" :style="{'left': offset.left +'px', 'top': offset.top+'px','width': width+'px'}" ref="popCard" v-click-out-side="closeCard">
 				<slot></slot>
 				<div class="pop-arrow" :style="{'left': offset.arrowLeft+'px'}"></div>
@@ -9,7 +9,7 @@
 		<div @click="togglePop" class="pop-handler" ref="popHandler">
 			<slot name="reference"></slot>
 		</div>
-	</div>
+	</span>
 </template>
 <script>
 export default {
@@ -19,7 +19,6 @@ export default {
 				el.clickOutsideEvent = (event) => {
 					if (!(el == event.target || el.contains(event.target)) || vnode.context.clickToClose) {
 				    	vnode.context[binding.expression](event);
-				    	console.log('ss')
 				    }
 				}
 				document.body.addEventListener('click', el.clickOutsideEvent)
@@ -29,7 +28,26 @@ export default {
 			}
 		}
 	},
-	props: ['width', 'clickToClose'],
+	props: {
+		width: {
+			type: Number,
+			default: function(){
+				return 120
+			}
+		},
+		clickToClose: {
+			type: Boolean,
+			default: function(){
+				return false
+			}
+		},
+		animationMode: {
+			type: String,
+			default: function (){
+				return 'fade'
+			}
+		}
+	},
 	data () {
 		return {
 			isShow: false,
@@ -51,17 +69,20 @@ export default {
 		closeCard(){
 			this.isShow = false
 			this.$emit('showChange', this.isShow)
+		},
+		setSize(){
+			let {offsetLeft, offsetTop, offsetHeight, offsetWidth} = this.$refs.popHandler
+			
+			this.offset.left = offsetLeft
+			this.offset.top = offsetTop + offsetHeight + 10
+			this.offset.arrowLeft = offsetWidth/2 - 6
 		}
 	},
 	mounted(){
-		let {offsetLeft, offsetTop, offsetHeight, offsetWidth} = this.$refs.popHandler
-		// let cardWidth = this.$refs.popCard.offsetWidth
-		console.log(this.$refs.popHandler)
-		console.log({offsetLeft, offsetTop})
-		this.offset.left = offsetLeft
-		this.offset.top = offsetTop + offsetHeight + 10
-		this.offset.arrowLeft = offsetWidth/2
-		// window.addEventListener('click', )
+		this.setSize()
+		window.addEventListener('resize', _ => {
+			this.setSize()
+		})
 	}
 }
 </script>

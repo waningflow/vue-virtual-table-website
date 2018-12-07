@@ -5,7 +5,9 @@
 		</BasePopover>
 		<BaseButton>Button</BaseButton>
 		<BaseSelect
+			v-model="selectedOpt"
 			:choice-list="list"
+			@change="handleChangeOpt"
 		></BaseSelect>
 	</div>
 </template>
@@ -22,6 +24,7 @@ export default {
 	},
 	data(){
 		return{
+			selectedOpt: 'ion',
 			list: [
 		        {
 		          value: "in",
@@ -32,6 +35,12 @@ export default {
 		          label: "Exclude"
 		        }
 		      ]
+		}
+	},
+	methods: {
+		handleChangeOpt(val){
+			console.log(val)
+			console.log(this.selectedOpt)
 		}
 	}
 }

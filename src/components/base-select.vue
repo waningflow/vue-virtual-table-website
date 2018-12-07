@@ -3,7 +3,8 @@
 		<BasePopover
 			:clickToClose="true"
 			@showChange="handlePopoverChange"
-			width="80">
+			:width="80"
+			animation-mode="slidedown">
 			<div class="option-list">
 				<div v-for="option in choiceList" class="option-item" :class="{'selected': option.value == selected.value}" @click="updateChoice(option)">{{option.label}}</div>
 			</div>
@@ -24,17 +25,32 @@ export default {
 	components: {
 		BasePopover
 	},
-	props: ['choiceList'],
+	model: {
+		prop: 'selectedValue',
+		event: 'change'
+	},
+	props: {
+		choiceList: {
+			type: Array,
+			default: function () {
+				return []
+			}
+		},
+		selectedValue: [String, Number]
+	},
 	data () {
 		return {
-			selected: {
-				value: "in",
-		        label: "Include"
-			},
+			selected: {},
 			arrowRotate: 0
 		}
 	},
+	mounted(){
+		this.updateSelected(this.selectedValue)
+	},
 	methods: {
+		updateSelected(val){
+			this.selected = this.choiceList.find(v => v.value == val)||{value: val, label: val }
+		},
 		handlePopoverChange(isShow){
 			if(isShow){
 				this.arrowRotate = -180
@@ -43,7 +59,11 @@ export default {
 			}
 		},
 		updateChoice(option){
-			this.selected = Object.assign({}, option)
+			this.$emit('change', option.value)
+			this.updateSelected(option.value)
+			// this.selected
+			// this.value = option.value
+			// this.selected = Object.assign({}, option)
 		}
 	}
 }
