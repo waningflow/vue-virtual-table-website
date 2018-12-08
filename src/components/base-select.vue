@@ -3,12 +3,12 @@
 		<BasePopover
 			:clickToClose="true"
 			@showChange="handlePopoverChange"
-			:width="80"
+			:width="width"
 			animation-mode="slidedown">
 			<div class="option-list">
 				<div v-for="option in choiceList" class="option-item" :class="{'selected': option.value == selected.value}" @click="updateChoice(option)">{{option.label}}</div>
 			</div>
-			<div slot="reference" class="select-box">
+			<div slot="reference" class="select-box" :style="{'width': width+'px'}">
 					{{selected.label}}
 					<!-- <div class="select-arrow"></div> -->
 				<div class="arrow-side">
@@ -36,7 +36,11 @@ export default {
 				return []
 			}
 		},
-		selectedValue: [String, Number]
+		selectedValue: [String, Number],
+		width: {
+			type: Number,
+			default: 80
+		}
 	},
 	data () {
 		return {
@@ -77,9 +81,8 @@ $font-color: #909399;
 
 .select-box{
 	font-size: 14px;
-	width: 80px;
-	height: 30px;
-  	border-radius: 2px;
+	height: 32px;
+  	border-radius: 4px;
   	outline: none;
   	background-color: $backgroud-color;
     color: $font-color;

@@ -10,28 +10,24 @@
 						<div class="header-line">
 							<div class="header-cell" v-for="(item, configIndex) in configTemp.filter(v=>!v.isHidden)" :key="configIndex" :style="{flex: colWidth[configIndex]}">
 								<div class="header-cell-inner search-wrapper" v-if="item.searchable">
-									<el-popover :ref="item.prop+'_search'" placement="bottom" width="340" trigger="click" v-model="item.searchVisible">
-
-										<template v-for="(phrase, ph_index) in item.searchPhrase">
-											<el-input class="" v-model="phrase.value" :autofocus="true" @change="handleClickConfirmFilter(configIndex)" style="margin-bottom: 6px;width: 320px" :placeholder="languageOptions[language].phraseFilter['ph']">
-												<el-select slot="prepend" v-model="phrase.operator" placeholder="" style="width: 110px" @change="handleClickConfirmFilter(configIndex)">
-													<el-option v-for="item in allPhraseOperator" :key="item.value" :label="languageOptions[language].phraseFilter[item.value]" :value="item.value">
-													</el-option>
-												</el-select>
-											</el-input>
-
-											<i class="el-icon-circle-close-outline" style="position:relative; top: 0px" v-show="ph_index > 0" @click="removePhraseFilter(configIndex, ph_index)"></i>
-										</template>
-										<div style="display: flex">
-											<el-button class="btn filterBtnEmpty" size="mini" @click="addFilterPhrase(configIndex)" :disabled="item.searchPhrase.length >= phraseLimit">{{languageOptions[language].phraseFilter['and_btn']}}</el-button>
-											<el-button class="btn filterBtnEmpty" type="danger" size="mini" @click="handleClickEmptyPhraseFilter(configIndex)">{{languageOptions[language].phraseFilter['clear_btn']}}</el-button>
-										</div>
+                  <base-popover :width="340">
+                    <div style="padding: 10px;text-align: left;">
+										  <template v-for="(phrase, ph_index) in item.searchPhrase">
+                        <base-select v-model="phrase.operator" style="width: 110px" @change="handleClickConfirmFilter(configIndex)" :choice-list="allPhraseOperator"></base-select>
+                        <base-input v-model="phrase.value" @change="handleClickConfirmFilter(configIndex)" style="margin:0 5px 6px 5px;width: 210px" :placeholder="languageOptions[language].phraseFilter['ph']"></base-input>
+                        <i class="icon_close_alt2" v-show="ph_index > 0" @click="removePhraseFilter(configIndex, ph_index)"></i>
+  										</template>
+  										<div style="display: flex">
+                        <base-button class="btn filterBtnEmpty" type="primary" @click.native="addFilterPhrase(configIndex)" :disabled="item.searchPhrase.length >= phraseLimit">{{languageOptions[language].phraseFilter['and_btn']}}</base-button>
+                        <base-button class="btn filterBtnEmpty" style="margin-left: 5px" type="danger" @click.native="handleClickEmptyPhraseFilter(configIndex)">{{languageOptions[language].phraseFilter['clear_btn']}}</base-button>
+  										</div>
+                    </div>
 
 										<span slot="reference">
 											<span v-if="item.name" :class="{searched: item.searchPhrase.findIndex(v => v.value != '') > -1}">{{item.name}}</span>
 											<span v-else :class="{searched: item.searchPhrase.findIndex(v => v.value != '') > -1}">{{item.prop}}</span>
 										</span>
-									</el-popover>
+                </base-popover>
 								</div>
 								<div class="header-cell-inner filter-wrapper" v-else-if="item.filterable">
 									<el-popover :ref="item.prop+'_filter'" placement="bottom" width="350" trigger="click" v-model="item.filterVisible">
@@ -174,6 +170,11 @@
 import VirtualScroller from "./virtual-scroller.vue";
 // import XLSX from "xlsx";
 import { ResizeObserver } from "vue-resize";
+import BasePopover from './base-popover.vue'
+import BaseButton from './base-button.vue'
+import BaseSelect from './base-select.vue'
+import BaseInput from './base-input.vue'
+import '../assets/base.css'
 import {
   Select,
   Option,
@@ -195,7 +196,11 @@ export default {
     [Input.name]: Input,
     [Checkbox.name]: Checkbox,
     [CheckboxGroup.name]: CheckboxGroup,
-    [Button.name]: Button
+    [Button.name]: Button,
+    BasePopover,
+    BaseButton,
+    BaseSelect,
+    BaseInput
   },
   props: {
     config: {
@@ -879,6 +884,9 @@ export default {
       this.$set(this.configTemp[index], "numberFilterVisible", false);
     },
     addFilterPhrase(index) {
+      if(this.configTemp[index].searchPhrase.length >= this.phraseLimit){
+        return
+      }
       this.configTemp[index].searchPhrase.push({ operator: "in", value: "" });
     },
     removePhraseFilter(index, ph_index) {

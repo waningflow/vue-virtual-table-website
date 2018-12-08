@@ -11,7 +11,7 @@ Instead of a list of all class selectors,
 you can use the generic selector below, but it's slower:
 [class*="your-class-prefix"] {
 */
-.arrow_carrot-down{
+.arrow_carrot-down, .icon_close_alt2{
 	font-family: 'ElegantIcons';
 	speak: none;
 	font-style: normal;

@@ -6,17 +6,21 @@
 				<div class="pop-arrow" :style="{'left': offset.arrowLeft+'px'}"></div>
 			</div>
 		</transition>
-		<div @click="togglePop" class="pop-handler" ref="popHandler">
+		<div @click="togglePop" class="pop-handler" ref="popHandler" v-observe-visibility="setSize">
 			<slot name="reference"></slot>
 		</div>
 	</span>
 </template>
 <script>
+import {ObserveVisibility} from 'vue-observe-visibility'
+
 export default {
 	directives: {
+		ObserveVisibility,
 		'click-out-side': {
 			bind (el, binding, vnode){
 				el.clickOutsideEvent = (event) => {
+					console.log('ss')
 					if (!(el == event.target || el.contains(event.target)) || vnode.context.clickToClose) {
 				    	vnode.context[binding.expression](event);
 				    }
@@ -46,6 +50,10 @@ export default {
 			default: function (){
 				return 'fade'
 			}
+		},
+		visible: {
+			type: Boolean,
+			default: true
 		}
 	},
 	data () {
@@ -60,6 +68,9 @@ export default {
 	},
 	methods: {
 		togglePop(e){
+			if(!this.visible){
+				return
+			}
 			if(this.isShow){
 				e.stopPropagation()
 			}
@@ -67,18 +78,28 @@ export default {
 			this.$emit('showChange', this.isShow)
 		},
 		closeCard(){
+			if(!this.visible){
+				return
+			}
 			this.isShow = false
 			this.$emit('showChange', this.isShow)
 		},
 		setSize(){
+			if(!this.$refs.popHandler){
+				return
+			}
 			let {offsetLeft, offsetTop, offsetHeight, offsetWidth} = this.$refs.popHandler
-			
+			console.log(this.$refs.popHandler)
+			console.log(this.$refs)
 			this.offset.left = offsetLeft
 			this.offset.top = offsetTop + offsetHeight + 10
-			this.offset.arrowLeft = offsetWidth/2 - 6
+			this.offset.arrowLeft = offsetWidth/2 - 3
 		}
 	},
 	mounted(){
+		if(!this.visible){
+			return
+		}
 		this.setSize()
 		window.addEventListener('resize', _ => {
 			this.setSize()
@@ -91,9 +112,9 @@ export default {
 		display: inline-block;
 	}
 	.pop-card {
-		width: 150px;
-		/*min-width: 150px;*/
-		min-height: 20px;
+		/*width: 150px;*/
+		min-width: 10px;
+		min-height: 10px;
 		border: 1px solid #ebeef5;
 		box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
 		position: absolute;

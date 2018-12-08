@@ -1,9 +1,10 @@
 <template>
-	<div style="height: 800px;border: 1px solid #eee">
+	<div style="height: 300px;border: 1px solid #eee">
 		<BasePopover>
+			<div>test</div>
+			<div>iuyt</div>
 			<BaseButton slot="reference">CLICK</BaseButton>
 		</BasePopover>
-		<BaseButton>Button</BaseButton>
 		<BaseSelect
 			v-model="selectedOpt"
 			:choice-list="list"
@@ -13,6 +14,14 @@
 			v-model="inputText"
 			@change="handleChangeInput">
 		</BaseInput>
+		<br> <br>
+		<BaseButton>Button</BaseButton>
+		<BaseButton type="primary">Button</BaseButton>
+		<BaseButton type="danger">Button</BaseButton>
+		<br><br>
+		<BaseButton :disabled="true">Button</BaseButton>
+		<BaseButton type="primary" :disabled="true">Button</BaseButton>
+		<BaseButton type="danger" :disabled="true">Button</BaseButton>
 	</div>
 </template>
 <script>
@@ -30,7 +39,7 @@ export default {
 	},
 	data(){
 		return{
-			selectedOpt: 'ion',
+			selectedOpt: 'in',
 			list: [
 		        {
 		          value: "in",
@@ -47,7 +56,6 @@ export default {
 	methods: {
 		handleChangeOpt(val){
 			console.log(val)
-			console.log(this.selectedOpt)
 		},
 		handleChangeInput(val){
 			console.log(val)

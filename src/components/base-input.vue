@@ -1,7 +1,5 @@
 <template>
-	<span>
-		<input :type="type" name="" :value="inputValue" @change="$emit('change', $event.target.value)" class="input-box">
-	</span>
+		<input :type="type" name="" :value="inputValue" @change="$emit('change', $event.target.value)" class="input-box" :placeholder="placeholder">
 </template>
 <script>
 export default {
@@ -14,6 +12,10 @@ export default {
 		type: {
 			type: String,
 			default: 'text'
+		},
+		placeholder: {
+			type: String,
+			default: ''
 		}
 	},
 	data () {
@@ -27,10 +29,11 @@ export default {
 $default-color: #3caed2;
 
 .input-box{
+	display:inline-block;
 	box-sizing: border-box;
-	height: 30px;
+	height: 32px;
 	border: 1px solid #d3d4d6;
-	border-radius: 2px;
+	border-radius: 4px;
 	padding: 0 5px;
 	outline: none;
 
