@@ -79,7 +79,7 @@ $font-color: #909399;
 $line-height: 32px;
 
 .select-box{
-	font-size: 12px;
+	font-size: 13px;
 	height: $line-height;
 	line-height: $line-height;
   	border-radius: 4px;
@@ -98,7 +98,7 @@ $line-height: 32px;
   	}
 }
 .option-list{
-	font-size: 12px;
+	font-size: 13px;
 	text-align: center;
 	padding: 5px 0;
 	.option-item{

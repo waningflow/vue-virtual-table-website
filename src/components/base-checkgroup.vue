@@ -57,8 +57,8 @@ export default {
 </script>
 <style scoped lang="scss">
 $default-color: #3caed2;
-$icon-width: 25px;
-$line-height: 30px;
+$icon-width: 20px;
+$line-height: 25px;
 
 .check-box{
 	&:hover{
@@ -68,7 +68,7 @@ $line-height: 30px;
 .check-item{
 	position: relative;
 	padding-left: $icon-width;
-	font-size: 16px;
+	font-size: 14px;
 	height: $line-height;
 	line-height: $line-height;
 

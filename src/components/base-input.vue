@@ -36,6 +36,7 @@ $default-color: #3caed2;
 	border-radius: 4px;
 	padding: 0 5px;
 	outline: none;
+	font-size: 12px;
 	transform: translateY(-1px);
 
 	&:focus{

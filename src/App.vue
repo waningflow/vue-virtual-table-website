@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-    <TestPlain></TestPlain>
     <div style="width: 1000px;margin: auto;">
       <div style="margin: 20px 0">
         <el-card>
@@ -183,7 +182,7 @@ export default {
     return {
       tableConfig: [
         {prop: '_index', name: '#', width: 80},
-        {prop: 'user', name: 'User', searchable: true, sortable: true, summary: 'COUNT', eTip: ['user', 'age']},
+        {prop: 'user', name: 'User', searchable: true, sortable: true, summary: 'COUNT'},
         {prop: 'age', name: 'Age', numberFilter: true},
         {prop: 'city', name: 'City', filterable: true},
         {prop: '_action', name: 'Action', actionName: 'actionCommon'}
@@ -201,7 +200,7 @@ export default {
         enableExport: true,
         bordered: false,
         hoverHighlight: true,
-        language: 'cn'
+        language: 'en'
       },
       lineNum: 1000,
       userConfig: {

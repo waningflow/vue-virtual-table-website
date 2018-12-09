@@ -11,11 +11,11 @@
 							<div class="header-cell" v-for="(item, configIndex) in configTemp.filter(v=>!v.isHidden)" :key="configIndex" :style="{flex: colWidth[configIndex]}">
 								<div class="header-cell-inner search-wrapper" v-if="item.searchable">
                   <base-popover :width="340">
-                    <div style="padding: 10px;text-align: left;">
+                    <div style="padding: 10px;text-align: left;font-size: 0">
 										  <template v-for="(phrase, ph_index) in item.searchPhrase">
                         <base-select v-model="phrase.operator" @change="handleClickConfirmFilter(configIndex)" :choice-list="allPhraseOperator.map(v=>({value: v.value, label: languageOptions[language].phraseFilter[v.value]}))"></base-select>
                         <base-input v-model="phrase.value" @change="handleClickConfirmFilter(configIndex)" style="margin:0 5px 6px 5px;width: 210px" :placeholder="languageOptions[language].phraseFilter['ph']"></base-input>
-                        <i class="icon_close_alt2" v-show="ph_index > 0" @click="removePhraseFilter(configIndex, ph_index)"></i>
+                        <i class="icon_close_alt2" style="font-size: 13px" v-show="ph_index > 0" @click="removePhraseFilter(configIndex, ph_index)"></i>
   										</template>
   										<div style="display: flex">
                         <base-button class="btn filterBtnEmpty" type="primary" @click.native="addFilterPhrase(configIndex)" :disabled="item.searchPhrase.length >= phraseLimit">{{languageOptions[language].phraseFilter['and_btn']}}</base-button>
@@ -48,10 +48,10 @@
 								</div>
 								<div class="header-cell-inner numFiltered-wrapper" v-else-if="item.numberFilter">
                   <base-popover :width="item.numberFilterPhrase.operator==='bt'?298:198">
-                    <div style="padding: 10px;text-align: left;">
+                    <div style="padding: 10px;text-align: left;font-size: 0">
                       <base-select v-model="item.numberFilterPhrase.operator" :choice-list="allOperatorType.map(v=>({value: v.value, label: languageOptions[language].numberFilter[v.value]}))" placeholder="" @change="handleClickConfirmFilter(configIndex)"></base-select>
                       <base-input style="width: 90px;margin-left: 5px" type="number" v-model="item.numberFilterPhrase.value[0]" @change="handleClickConfirmFilter(configIndex)"> </base-input>
-                        <div style="display: inline-block;" v-show="item.numberFilterPhrase.operator === 'bt'">~</div>
+                        <div style="display: inline-block;font-size: 13px" v-show="item.numberFilterPhrase.operator === 'bt'">~</div>
                         <base-input style="width: 90px;margin-left: 1px;" type="number" v-model="item.numberFilterPhrase.value[1]" v-show="item.numberFilterPhrase.operator === 'bt'" @change="handleClickConfirmFilter(configIndex)"></base-input>
                        <div style="text-align: right;">
                         <base-button style="margin-top: 10px" type="danger" @click.native="handleClickEmptyNumberFilter(configIndex)">{{languageOptions[language].numberFilter['clear_btn']}}</base-button>

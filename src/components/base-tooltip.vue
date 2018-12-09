@@ -115,7 +115,7 @@ export default {
 		transform-origin: 0 0;
 		padding: 5px;
 		display: none;
-		font-size: 16px;
+		font-size: 13px;
 	}
 	.pop-card:hover{
 		display: block;
