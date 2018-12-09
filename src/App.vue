@@ -174,7 +174,6 @@
 <script>
 import VueVirtualTable from './components/vue-virtual-table'
 import TestPlain from './components/test-plain.vue'
-import './components/customize-style.scss'
 
 export default {
   name: 'app',
@@ -252,7 +251,7 @@ export default {
       for(let i = 0;i<len;i++){
         let user = 'u'+this.uuid(6, 10),
             age = Math.floor((34-16)*Math.random())+16
-        let cityIndex = Math.floor(10*Math.random())
+        let cityIndex = Math.floor(cts.length*Math.random())
         let city = cts[cityIndex]
         all_data.push({user, age, city})
       }
