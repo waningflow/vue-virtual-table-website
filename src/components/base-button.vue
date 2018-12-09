@@ -22,6 +22,7 @@ $default-color: #3caed2;
 $danger-color: #f56c6c;
 
 .base-button{
+	font-size: 12px;
 	display: inline-block;
 	min-width: 55px;
 	min-height: 28px;

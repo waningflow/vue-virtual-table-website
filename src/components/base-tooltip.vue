@@ -1,12 +1,12 @@
 <template>
-	<div style="display: inline-block;">
+	<div style="display: inline-block;" class="mainCard">
 		<transition :name="animationMode">
-			<div class="pop-card" v-if="isShow" :style="{'left': offset.left +'px', 'top': offset.top+'px','width': width+'px'}" ref="popCard" v-click-out-side="closeCard">
+			<div class="pop-card" :style="{'left': offset.left +'px', 'top': offset.top+'px','width': width+'px'}" ref="popCard" @click="handleClick">
 				<slot></slot>
 				<div class="pop-arrow" :style="{'left': offset.arrowLeft+'px'}"></div>
 			</div>
 		</transition>
-		<div @click="togglePop" class="pop-handler" ref="popHandler" v-observe-visibility="setSize">
+		<div class="pop-handler" ref="popHandler" v-observe-visibility="setSize">
 			<slot name="reference"></slot>
 		</div>
 	</div>
@@ -16,32 +16,13 @@ import {ObserveVisibility} from 'vue-observe-visibility'
 
 export default {
 	directives: {
-		ObserveVisibility,
-		'click-out-side': {
-			bind (el, binding, vnode){
-				el.clickOutsideEvent = (event) => {
-					if (!(el == event.target || el.contains(event.target)) || vnode.context.clickToClose) {
-				    	vnode.context[binding.expression](event);
-				    }
-				}
-				document.body.addEventListener('click', el.clickOutsideEvent)
-			},
-			unbind (el) {
-				document.body.removeEventListener('click', el.clickOutsideEvent)
-			}
-		}
+		ObserveVisibility
 	},
 	props: {
 		width: {
-			type: Number,
+			type: [Number, String],
 			default: function(){
-				return 120
-			}
-		},
-		clickToClose: {
-			type: Boolean,
-			default: function(){
-				return false
+				return 'auto'
 			}
 		},
 		animationMode: {
@@ -66,6 +47,9 @@ export default {
 		}
 	},
 	methods: {
+		handleClick(e){
+			e.stopPropagation()
+		},
 		togglePop(e){
 			if(!this.visible){
 				return
@@ -94,7 +78,7 @@ export default {
 			}
 			this.offset.left = offsetLeft - moveLeft
 
-			this.offset.top = offsetTop + offsetHeight + 10
+			this.offset.top = offsetTop + offsetHeight
 			this.offset.arrowLeft = offsetWidth/2 - 6 + moveLeft
 		}
 	},
@@ -110,6 +94,9 @@ export default {
 }
 </script>
 <style scoped>
+	.mainCard:hover .pop-card{
+		display: block;
+	}
 	.pop-handler{
 		display: inline-block;
 	}
@@ -126,6 +113,12 @@ export default {
 		border-radius: 5px;
 		box-sizing: border-box;
 		transform-origin: 0 0;
+		padding: 5px;
+		display: none;
+		font-size: 16px;
+	}
+	.pop-card:hover{
+		display: block;
 	}
 	.pop-arrow, .pop-arrow::after{
 		top: -6px;

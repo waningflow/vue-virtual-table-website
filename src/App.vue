@@ -175,6 +175,7 @@
 <script>
 import VueVirtualTable from './components/vue-virtual-table'
 import TestPlain from './components/test-plain.vue'
+import './components/customize-style.scss'
 
 export default {
   name: 'app',
@@ -182,7 +183,7 @@ export default {
     return {
       tableConfig: [
         {prop: '_index', name: '#', width: 80},
-        {prop: 'user', name: 'User', searchable: true, sortable: true, summary: 'COUNT'},
+        {prop: 'user', name: 'User', searchable: true, sortable: true, summary: 'COUNT', eTip: ['user', 'age']},
         {prop: 'age', name: 'Age', numberFilter: true},
         {prop: 'city', name: 'City', filterable: true},
         {prop: '_action', name: 'Action', actionName: 'actionCommon'}
@@ -200,7 +201,7 @@ export default {
         enableExport: true,
         bordered: false,
         hoverHighlight: true,
-        language: 'en'
+        language: 'cn'
       },
       lineNum: 1000,
       userConfig: {

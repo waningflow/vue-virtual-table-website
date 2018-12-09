@@ -1,5 +1,4 @@
 <template>
-	<span>
 		<BasePopover
 			:clickToClose="true"
 			@showChange="handlePopoverChange"
@@ -16,7 +15,6 @@
 				</div>
 			</div>
 		</BasePopover>
-	</span>
 </template>
 <script>
 import BasePopover from './base-popover.vue'
@@ -78,28 +76,29 @@ $default-color: #3caed2;
 $backgroud-color: #f5f7fa;
 $border-color: #dcdfe6;
 $font-color: #909399;
+$line-height: 32px;
 
 .select-box{
-	font-size: 14px;
-	height: 32px;
+	font-size: 12px;
+	height: $line-height;
+	line-height: $line-height;
   	border-radius: 4px;
   	outline: none;
   	background-color: $backgroud-color;
     color: $font-color;
-    display: flex;
-    align-items: center;
     position: relative;
     border: 1px solid $border-color;
     white-space: nowrap;
     padding-left: 5px;
-    padding-rigth: 20px;
+    padding-right: 20px;
     box-sizing: border-box;
+    text-align: center;
   	&:hover{
   		cursor: pointer;
   	}
 }
 .option-list{
-	font-size: 14px;
+	font-size: 12px;
 	text-align: center;
 	padding: 5px 0;
 	.option-item{

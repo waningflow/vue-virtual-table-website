@@ -1,5 +1,5 @@
 <template>
-	<div style="height: 300px;border: 1px solid #eee">
+	<div style="height: 400px;border: 1px solid #eee">
 		<BasePopover>
 			<div>test</div>
 			<div>iuyt</div>
@@ -29,6 +29,18 @@
 			:choice-list="checkList"
 			@change="handleChangeChecked"
 		></base-checkgroup>
+		<br><br>
+		<BasePopover style="float: right">
+			<div>test</div>
+			<div>iuyt</div>
+			<BaseButton slot="reference">CLICK</BaseButton>
+		</BasePopover>
+		<br><br>
+		<base-tooltip 
+		>
+			<div>sjdief</div>
+			<div slot="reference">testcbeu</div>
+		</base-tooltip>
 	</div>
 </template>
 <script>
@@ -37,6 +49,7 @@ import BaseButton from './base-button.vue'
 import BaseSelect from './base-select.vue'
 import BaseInput from './base-input.vue'
 import BaseCheckgroup from './base-checkgroup.vue'
+import BaseTooltip from './base-tooltip.vue'
 
 export default {
 	components: {
@@ -44,7 +57,8 @@ export default {
 		BaseButton,
 		BaseSelect,
 		BaseInput,
-		BaseCheckgroup
+		BaseCheckgroup,
+		BaseTooltip
 	},
 	data(){
 		return{

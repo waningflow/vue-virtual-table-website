@@ -2,7 +2,7 @@
 	<div class="main-scroll" ref="mainScroll">
 		<div ref="mainTable" :style="{'min-width': minWidthTemp+'px','position': 'relative'}" :class="{'bordered': bordered}">
 			<div style="text-align: right; position: absolute;right: 5px;top: 5px;" v-if="enableExport" >
-				<el-button @click="handleExportTable" size="mini" plain type="info" circle icon="el-icon-download"></el-button>
+        <i class="icon_cloud-download_alt download-icon" @click="handleExportTable"></i>
 			</div>
 			<div class="t-header">
 				<div ref="tHeaderTable">
@@ -13,7 +13,7 @@
                   <base-popover :width="340">
                     <div style="padding: 10px;text-align: left;">
 										  <template v-for="(phrase, ph_index) in item.searchPhrase">
-                        <base-select v-model="phrase.operator" style="width: 110px" @change="handleClickConfirmFilter(configIndex)" :choice-list="allPhraseOperator"></base-select>
+                        <base-select v-model="phrase.operator" @change="handleClickConfirmFilter(configIndex)" :choice-list="allPhraseOperator.map(v=>({value: v.value, label: languageOptions[language].phraseFilter[v.value]}))"></base-select>
                         <base-input v-model="phrase.value" @change="handleClickConfirmFilter(configIndex)" style="margin:0 5px 6px 5px;width: 210px" :placeholder="languageOptions[language].phraseFilter['ph']"></base-input>
                         <i class="icon_close_alt2" v-show="ph_index > 0" @click="removePhraseFilter(configIndex, ph_index)"></i>
   										</template>
@@ -42,33 +42,32 @@
                     <span slot="reference">
                       <span v-if="item.name" :class="{filtered: item.filterSelectedOptions && item.filterSelectedOptions.length}">{{item.name}}</span>
                       <span v-else :class="{filtered: item.filterSelectedOptions && item.filterSelectedOptions.length}">{{item.prop}}</span>
-                      <i class="el-icon-arrow-down"></i>
+                      <i class="arrow_carrot-down"></i>
                     </span>
                   </base-popover>
 								</div>
 								<div class="header-cell-inner numFiltered-wrapper" v-else-if="item.numberFilter">
-									<el-popover :ref="item.prop+'_number_filter'" placement="bottom-start" :width="item.numberFilterPhrase.operator==='bt'?320:220" trigger="click" v-model="item.numberFilterVisible">
-										<el-input class="filterInputNumber" style="width: 210px" type="number" v-model="item.numberFilterPhrase.value[0]" @change="handleClickConfirmFilter(configIndex)">
-											<el-select slot="prepend" v-model="item.numberFilterPhrase.operator" placeholder="" class="filterSelectNumber" @change="handleClickConfirmFilter(configIndex)">
-												<el-option v-for="item in allOperatorType" :key="item.value" :label="languageOptions[language].numberFilter[item.value]" :value="item.value">
-											</el-option>
-										</el-select>
-										</el-input>
-										<el-input class="filterInputNumber numberMax" type="number" v-model="item.numberFilterPhrase.value[1]" v-show="item.numberFilterPhrase.operator === 'bt'" @change="handleClickConfirmFilter(configIndex)"></el-input>
-										<div style="width:100%;float:left">
-											<el-button class="btn filterBtnEmpty" type="danger" size="mini" @click="handleClickEmptyNumberFilter(configIndex)">{{languageOptions[language].numberFilter['clear_btn']}}</el-button>
-										</div>
-										<span slot="reference">
-											<span v-if="item.name" :class="{numFiltered: item.numberFilterPhrase.value[0] !== ''}">{{item.name}}</span>
-											<span v-else :class="{numFiltered: item.numberFilterPhrase.value[0] !== ''}">{{item.prop}}</span>
-										</span>
-									</el-popover>
+                  <base-popover :width="item.numberFilterPhrase.operator==='bt'?298:198">
+                    <div style="padding: 10px;text-align: left;">
+                      <base-select v-model="item.numberFilterPhrase.operator" :choice-list="allOperatorType.map(v=>({value: v.value, label: languageOptions[language].numberFilter[v.value]}))" placeholder="" @change="handleClickConfirmFilter(configIndex)"></base-select>
+                      <base-input style="width: 90px;margin-left: 5px" type="number" v-model="item.numberFilterPhrase.value[0]" @change="handleClickConfirmFilter(configIndex)"> </base-input>
+                        <div style="display: inline-block;" v-show="item.numberFilterPhrase.operator === 'bt'">~</div>
+                        <base-input style="width: 90px;margin-left: 1px;" type="number" v-model="item.numberFilterPhrase.value[1]" v-show="item.numberFilterPhrase.operator === 'bt'" @change="handleClickConfirmFilter(configIndex)"></base-input>
+                       <div style="text-align: right;">
+                        <base-button style="margin-top: 10px" type="danger" @click.native="handleClickEmptyNumberFilter(configIndex)">{{languageOptions[language].numberFilter['clear_btn']}}</base-button>
+                        </div>
+                    </div>
+                    <span slot="reference">
+                      <span v-if="item.name" :class="{numFiltered: item.numberFilterPhrase.value[0] !== ''}">{{item.name}}</span>
+                      <span v-else :class="{numFiltered: item.numberFilterPhrase.value[0] !== ''}">{{item.prop}}</span>
+                    </span>
+                  </base-popover>
 								</div>
 								<div class="header-cell-inner" v-else>
 									<span v-if="item.name" :class="{filtered: item.filterSelectedOptions && item.filterSelectedOptions.length}">{{item.name}}</span>
 									<span v-else :class="{filtered: item.filterSelectedOptions && item.filterSelectedOptions.length}">{{item.prop}}</span>
 								</div>
-								<div class="header-cell-inner all-select" v-if="selectable && item.prop==='_index'" @click="selectAll()">All</div>
+								<div class="header-cell-inner all-select" v-if="selectable && item.prop==='_index'" @click="selectAll()">{{languageOptions[language].selectAll}}</div>
 								<div class="header-cell-inner caret-wrapper" v-if="item.sortable">
 									<i class="sort-ascending" @click="handleClickSort(item.prop, 'asc')" :class="{selected: sortParam.col === item.prop&&sortParam.direction === 'asc'}"></i>
 									<i class="sort-descending" @click="handleClickSort(item.prop, 'desc')" :class="{selected: sortParam.col === item.prop&&sortParam.direction === 'desc'}"></i>
@@ -95,17 +94,16 @@
 								</template>
 								<template v-else>
 									<div class="item-cell-inner" v-if="item.prop === '_expand'">
-
-										<el-popover placement="bottom-start" :width="mainWidth-54" popper-class="popperCard" trigger="click">
-											<div >
-												<slot :index="props.itemIndex" :row="clearObj(props.item)" name="expand" />
-											</div>
-											<i class="el-icon-arrow-right" slot="reference" style="cursor:pointer" @click="handleClickExpand"></i>
-										</el-popover>
+                    <base-popover :width="mainWidth-54">
+                      <div >
+                        <slot :index="props.itemIndex" :row="clearObj(props.item)" name="expand" />
+                      </div>
+                      <i class="arrow_carrot-right" slot="reference" style="cursor:pointer" @click="handleClickExpand"></i>
+                    </base-popover>
 									</div>
 									<div class="item-cell-inner" v-else-if="item.eTip" :style="{'align-items': item.alignItems||'center'}">
-										<el-tooltip placement="top-start" effect="light">
-											<div slot="content" class="tips">
+										<base-tooltip >
+											<div style="text-align: left;font-size: 13px">
 												<span v-for="tipProp in item.eTip" :key="tipProp">
 													<span v-if="item.eTipWithProp">{{configTemp.filter(v=>v.prop===tipProp)[0].name}}: </span>
 													<span>
@@ -115,9 +113,9 @@
 														<br>
 													</span>
 												</span>
-												<i class="el-icon-document" @click="handleClickCopy(props.item, item.eTip)" style="color: #aaa; cursor: pointer;"></i>
+												<i class="icon_documents_alt" @click="handleClickCopy(props.item, item.eTip)" style="color: #aaa; cursor: pointer;"></i>
 											</div>
-											<span>
+											<span slot="reference">
 												<span v-if="item.prefix && props.item[item.prop]" :class="props.item._eClass[item.prop]||''" class="prefix">{{item.prefix}}</span>
 												<span v-if="item.prop === '_index'">{{props.itemIndex + 1}}</span>
 												<span v-else-if="item.filterable" class="tag" :class="item.filterTag[props.item[item.prop]]||'defaultTag'">{{props.item[item.prop]}}</span>
@@ -125,7 +123,7 @@
 												<span v-else>{{props.item[item.prop]}}</span>
 												<span v-if="item.suffix && props.item[item.prop]" :class="props.item._eClass[item.prop]||''" class="suffix">{{item.suffix}}</span>
 											</span>
-										</el-tooltip>
+										</base-tooltip>
 									</div>
 									<div class="item-cell-inner" v-else :style="{'align-items': item.alignItems||'center'}">
 										<span v-if="item.prefix && props.item[item.prop]" :class="props.item._eClass[item.prop]||''" class="prefix">{{item.prefix}}</span>
@@ -147,10 +145,10 @@
 					<div class="bottom-line">
 						<div class="bottom-cell" v-for="(item, configIndex) in configTemp.filter(v=>!v.isHidden)" :key="configIndex" :style="{flex: colWidth[configIndex]}">
 							<span v-if="item.prop === '_expand' && item.expandSummary">
-								<el-popover placement="bottom-start" :width="mainWidth-54" popper-class="popperCard" trigger="click">
-									<slot :data="dataTemp" name="summary" />
-									<i class="el-icon-arrow-right" slot="reference" style="cursor:pointer" @click="handleClickExpand"></i>
-								</el-popover>
+                <base-popover :width="mainWidth-54">
+                  <slot :data="dataTemp" name="summary" />
+                  <i class="arrow_carrot-right" slot="reference" style="cursor:pointer" @click="handleClickExpand"></i>
+                </base-popover>
 							</span>
 							<span v-if="item.prefix">{{item.prefix}}</span>
 							<span v-if="item.summary">{{summaryData.filter(v => v.prop === item.prop)[0].value}}</span>
@@ -169,41 +167,26 @@
 </template>
 <script>
 import VirtualScroller from "./virtual-scroller.vue";
-// import XLSX from "xlsx";
 import { ResizeObserver } from "vue-resize";
 import BasePopover from './base-popover.vue'
 import BaseButton from './base-button.vue'
 import BaseSelect from './base-select.vue'
 import BaseInput from './base-input.vue'
 import BaseCheckgroup from './base-checkgroup.vue'
+import BaseTooltip from './base-tooltip.vue'
 import '../assets/base.css'
-import {
-  Select,
-  Option,
-  Popover,
-  Input,
-  Checkbox,
-  CheckboxGroup,
-  Button
-} from "element-ui";
 
 export default {
   name: "VueVirtualTable",
   components: {
     VirtualScroller,
     ResizeObserver,
-    [Select.name]: Select,
-    [Option.name]: Option,
-    [Popover.name]: Popover,
-    [Input.name]: Input,
-    [Checkbox.name]: Checkbox,
-    [CheckboxGroup.name]: CheckboxGroup,
-    [Button.name]: Button,
     BasePopover,
     BaseButton,
     BaseSelect,
     BaseInput,
-    BaseCheckgroup
+    BaseCheckgroup,
+    BaseTooltip
   },
   props: {
     config: {
@@ -278,12 +261,6 @@ export default {
         return {};
       }
     },
-    mainColor: {
-      type: String,
-      default: function() {
-        return "#3caed2";
-      }
-    },
     hoverHighlight: {
       type: Boolean,
       default: function() {
@@ -354,6 +331,7 @@ export default {
       phraseLimit: 6,
       languageOptions: {
         en: {
+          selectAll: 'All',
           phraseFilter: {
             in: "Include",
             out: "Exclude",
@@ -378,6 +356,7 @@ export default {
           }
         },
         cn: {
+          selectAll: '全选',
           phraseFilter: {
             in: "包含",
             out: "不包含",
@@ -540,36 +519,29 @@ export default {
       }
       this.clipboardCP(text)
         .then(result => {
-          this.$message.success("复制成功");
         })
         .catch(err => {
           console.log(err);
         });
     },
     handleExportTable() {
-      let excelHeader = this.configTemp
-        .filter(v => !["_index", "_action", "_expand"].includes(v.prop))
-        .map(v => v.prop);
-      let printData = [];
-      this.dataTemp.forEach(v => {
-        let item = {};
-        excelHeader.forEach(val => {
-          item = Object.assign(item, { [val]: v[val] });
-        });
-        printData.push(item);
-      });
-      const wopts = { bookType: "xlsx", bookSST: false, type: "binary" };
-      let wb = { SheetNames: [], Sheets: {}, Props: {} };
-      wb.SheetNames.push("sheet1");
-      wb.Sheets["sheet1"] = XLSX.utils.json_to_sheet(printData);
-      this.saveAs(
-        new Blob([this.s2ab(XLSX.write(wb, wopts))], {
-          type: "application/octet-stream"
-        }),
-        new Date().toLocaleDateString() +
-          "." +
-          (wopts.bookType == "biff2" ? "xls" : wopts.bookType)
-      );
+      let header = {}
+      for(let v of this.configTemp){
+        if(!["_index", "_action", "_expand"].includes(v.prop)){
+          header[v.prop] = v.name||v.prop
+        }
+      }
+      let data = this.deepCopy(this.dataTemp)
+      data = data.map(v => {
+        let item = {}
+        for(let prop in header){
+          item[prop] = v[prop]
+        }
+        return item
+      })
+      data.unshift(header)
+      let title = new Date().toLocaleDateString() + '.csv'
+      this.exportCsv(data, title)
     },
     saveAs(obj, fileName) {
       //自定义简单的下载文件实现方式
@@ -998,9 +970,9 @@ export default {
           mainWidth +
           "px;height:" +
           (this.height -
-            60 -
+            50 -
             35 * Number(this.enableExport) -
-            60 * (this.showSummary ? 1 : 0)) +
+            50 * (this.showSummary ? 1 : 0)) +
           "px"
       );
       this.$refs.tHeaderTable.setAttribute(
@@ -1072,11 +1044,38 @@ export default {
       delete obj_cp._eId;
       delete obj_cp._eSelected;
       return obj_cp;
+    },
+    json2csv(array) {
+        let str = ''
+        for(let item of array){
+          let line = '';
+          for (let index in item) {
+              if (line != '') line += ','
+              line += item[index];
+          }
+          str += line + '\r\n'
+        }
+        return str
+    },
+    exportCsv(data, title) {
+      let csv = this.json2csv(data);
+
+      let createAndDownloadFile = (fileName, content) => {
+          let aTag = document.createElement('a');
+          let blob = new Blob([content], { type: 'text/csv;charset=utf-8;' });
+          aTag.download = fileName;
+          aTag.href = URL.createObjectURL(blob);
+          aTag.click();
+          URL.revokeObjectURL(blob);
+      }  
+      createAndDownloadFile(title, csv)
     }
   }
 };
 </script>
-<style scoped>
+<style scoped lang="scss">
+$default-color: #3caed2;
+
 .main-scroll {
   width: 100%;
   overflow-y: hidden;
@@ -1154,18 +1153,18 @@ i.sort-descending {
 }
 
 i.sort-ascending.selected {
-  border-bottom-color: #3caed2;
+  border-bottom-color: $default-color;
 }
 i.sort-descending.selected {
-  border-top-color: #3caed2;
+  border-top-color: $default-color;
 }
 
 .header-line {
   color: #606266;
-  height: 60px;
+  height: 50px;
 }
 .bottom-line {
-  height: 60px;
+  height: 50px;
 }
 
 .bordered .item-cell,
@@ -1185,7 +1184,7 @@ i.sort-descending.selected {
 }
 
 .t-bottom {
-  height: 60px;
+  height: 50px;
   border-top: 1px solid #ebeef5;
   background-color: #f5f7fa;
 }
@@ -1223,6 +1222,15 @@ div.item-line.unselectable {
   background-color: #fff;
 }
 
+.download-icon{
+  color: #bbb;
+  font-size: 20px;
+  &:hover{
+    color: $default-color;
+    cursor: pointer;
+  }
+}
+
 /*----------------*/
 
 .tag {
@@ -1232,7 +1240,7 @@ div.item-line.unselectable {
   /*font-size: 16px;*/
   border-radius: 4px;
   box-sizing: border-box;
-  color: #3caed2;
+  color: $default-color;
   background-color: rgba(60, 174, 210, 0.1);
   border: 1px solid rgba(60, 174, 210, 0.2);
   white-space: nowrap;
@@ -1253,20 +1261,16 @@ div.item-line.unselectable {
 .filter-btn {
   overflow: hidden;
   border-top: 1px solid #ebeef5;
-  padding-top: 6px;
+  padding: 6px;
   margin-top: 6px;
   text-align: left;
+  padding: 10px 5px 5px 5px;
 }
-.filter-btn .btn {
-  float: left;
-  width: 50px;
-  margin: 0 12px;
-  padding: 5px;
-}
+
 .filtered,
 .searched,
 .numFiltered {
-  color: #3caed2;
+  color: $default-color;
 }
 
 .warningColor {
@@ -1291,10 +1295,10 @@ div.item-line.unselectable {
   text-align: left;
 }
 .tips {
-  font-size: 17px;
+  font-size: 14px;
 }
 .defaultTag {
-  color: #3caed2;
+  color: $default-color;
   background-color: rgba(60, 174, 210, 0.1);
   border-color: rgba(60, 174, 210, 0.2);
 }
@@ -1317,15 +1321,6 @@ div.item-line.unselectable {
   color: #909399;
   background: #f4f4f5;
   border-color: #d3d4d6;
-}
-.filterSelectNumber {
-  float: left;
-  width: 120px;
-}
-.filterInputNumber {
-  float: left;
-  width: 90px;
-  margin-left: 5px;
 }
 .numberMax {
   margin-left: 15px;
