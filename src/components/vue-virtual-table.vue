@@ -30,20 +30,21 @@
                 </base-popover>
 								</div>
 								<div class="header-cell-inner filter-wrapper" v-else-if="item.filterable">
-									<el-popover :ref="item.prop+'_filter'" placement="bottom" width="350" trigger="click" v-model="item.filterVisible">
-										<el-checkbox-group v-model="item.filterSelectedOptions" @change="handleChangeFilter" class="filter-list">
-											<el-checkbox v-for="tag in item.filterOptions" :label="tag" :key="tag" class="filter-item">{{tag}}</el-checkbox>
-										</el-checkbox-group>
-										<div class="filter-btn">
-											<el-button size="mini" @click="handleClickConfirmFilter(configIndex)">{{languageOptions[language].selectFilter['confirm_btn']}}</el-button>
-											<el-button size="mini" @click="handleClickReverseFilter(configIndex)">{{languageOptions[language].selectFilter['reverse_btn']}}</el-button>
-										</div>
-										<span slot="reference">
-											<span v-if="item.name" :class="{filtered: item.filterSelectedOptions && item.filterSelectedOptions.length}">{{item.name}}</span>
-											<span v-else :class="{filtered: item.filterSelectedOptions && item.filterSelectedOptions.length}">{{item.prop}}</span>
-											<i class="el-icon-arrow-down"></i>
-										</span>
-									</el-popover>
+                  <base-popover :width="240">
+                    <div style="padding: 5px;">
+                      <base-checkgroup v-model="item.filterSelectedOptions" @change="handleChangeFilter" :choice-list="item.filterOptions" class="filter-list"></base-checkgroup>
+                      <div class="filter-btn">
+                        <base-button type="primary" @click.native="handleClickConfirmFilter(configIndex)">{{languageOptions[language].selectFilter['confirm_btn']}}</base-button>
+                        <base-button type="primary" style="margin-left: 5px;" @click.native="handleClickReverseFilter(configIndex)">{{languageOptions[language].selectFilter['reverse_btn']}}</base-button>
+                        <base-button type="danger" style="margin-left: 5px;" @click.native="handleClickClearFilter(configIndex)">{{languageOptions[language].selectFilter['clear_btn']}}</base-button>
+                      </div>
+                    </div>
+                    <span slot="reference">
+                      <span v-if="item.name" :class="{filtered: item.filterSelectedOptions && item.filterSelectedOptions.length}">{{item.name}}</span>
+                      <span v-else :class="{filtered: item.filterSelectedOptions && item.filterSelectedOptions.length}">{{item.prop}}</span>
+                      <i class="el-icon-arrow-down"></i>
+                    </span>
+                  </base-popover>
 								</div>
 								<div class="header-cell-inner numFiltered-wrapper" v-else-if="item.numberFilter">
 									<el-popover :ref="item.prop+'_number_filter'" placement="bottom-start" :width="item.numberFilterPhrase.operator==='bt'?320:220" trigger="click" v-model="item.numberFilterVisible">
@@ -174,6 +175,7 @@ import BasePopover from './base-popover.vue'
 import BaseButton from './base-button.vue'
 import BaseSelect from './base-select.vue'
 import BaseInput from './base-input.vue'
+import BaseCheckgroup from './base-checkgroup.vue'
 import '../assets/base.css'
 import {
   Select,
@@ -200,7 +202,8 @@ export default {
     BasePopover,
     BaseButton,
     BaseSelect,
-    BaseInput
+    BaseInput,
+    BaseCheckgroup
   },
   props: {
     config: {
@@ -360,7 +363,8 @@ export default {
           },
           selectFilter: {
             confirm_btn: "Confirm",
-            reverse_btn: "Reverse"
+            reverse_btn: "Reverse",
+            clear_btn: "Clear"
           },
           numberFilter: {
             eq: "=",
@@ -383,7 +387,8 @@ export default {
           },
           selectFilter: {
             confirm_btn: "确定",
-            reverse_btn: "反转"
+            reverse_btn: "反转",
+            clear_btn: "清除"
           },
           numberFilter: {
             eq: "=",
@@ -863,12 +868,11 @@ export default {
       self.refreshSummary();
     },
     handleClickReverseFilter(index) {
-      let self = this;
-      let options = self.configTemp[index].filterOptions.slice();
-      let selecetedOptions = self.configTemp[
+      let options = this.configTemp[index].filterOptions.slice();
+      let selecetedOptions = this.configTemp[
         index
       ].filterSelectedOptions.slice();
-      self.configTemp[index].filterSelectedOptions = options.reduce(
+      this.configTemp[index].filterSelectedOptions = options.reduce(
         (prev, curr) => {
           if (selecetedOptions.indexOf(curr) === -1) {
             prev.push(curr);
@@ -877,6 +881,11 @@ export default {
         },
         []
       );
+      this.handleClickConfirmFilter(index)
+    },
+    handleClickClearFilter(index){
+      this.configTemp[index].filterSelectedOptions = []
+      this.handleClickConfirmFilter(index)
     },
     handleClickEmptyNumberFilter(index) {
       this.configTemp[index].numberFilterPhrase.value = ["", ""];
@@ -1246,6 +1255,7 @@ div.item-line.unselectable {
   border-top: 1px solid #ebeef5;
   padding-top: 6px;
   margin-top: 6px;
+  text-align: left;
 }
 .filter-btn .btn {
   float: left;

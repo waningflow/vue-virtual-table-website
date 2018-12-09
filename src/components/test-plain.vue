@@ -22,6 +22,13 @@
 		<BaseButton :disabled="true">Button</BaseButton>
 		<BaseButton type="primary" :disabled="true">Button</BaseButton>
 		<BaseButton type="danger" :disabled="true">Button</BaseButton>
+		<br><br>
+		<base-checkgroup
+			style="width: 100px"
+			v-model="checkedList"
+			:choice-list="checkList"
+			@change="handleChangeChecked"
+		></base-checkgroup>
 	</div>
 </template>
 <script>
@@ -29,13 +36,15 @@ import BasePopover from './base-popover.vue'
 import BaseButton from './base-button.vue'
 import BaseSelect from './base-select.vue'
 import BaseInput from './base-input.vue'
+import BaseCheckgroup from './base-checkgroup.vue'
 
 export default {
 	components: {
 		BasePopover,
 		BaseButton,
 		BaseSelect,
-		BaseInput
+		BaseInput,
+		BaseCheckgroup
 	},
 	data(){
 		return{
@@ -50,7 +59,9 @@ export default {
 		          label: "Exclude"
 		        }
 		      ],
-		    inputText: 'dhiehfnoe'
+		    inputText: 'dhiehfnoe',
+		    checkList: ['adeofnigrigtign', 'b', 'c'],
+		    checkedList: []
 		}
 	},
 	methods: {
@@ -58,6 +69,9 @@ export default {
 			console.log(val)
 		},
 		handleChangeInput(val){
+			console.log(val)
+		},
+		handleChangeChecked(val){
 			console.log(val)
 		}
 	}
