@@ -20,7 +20,7 @@ import boxChecked from './icons/boxChecked.vue'
 import boxEmpty from './icons/boxEmpty.vue'
 import closeAlt2 from './icons/closeAlt2.vue'
 import cloudDownloadAlt from './icons/cloudDownloadAlt.vue'
-import documentsAlt from './icons/documentsAlt'
+import documentsAlt from './icons/documentsAlt.vue'
 
 export default {
   components: {
