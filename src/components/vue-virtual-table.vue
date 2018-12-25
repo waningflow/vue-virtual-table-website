@@ -175,6 +175,7 @@ import BaseInput from './base-input.vue'
 import BaseCheckgroup from './base-checkgroup.vue'
 import BaseTooltip from './base-tooltip.vue'
 import BaseIcon from './base-icon.vue'
+import 'vue-resize/dist/vue-resize.css'
 
 export default {
   name: "VueVirtualTable",
