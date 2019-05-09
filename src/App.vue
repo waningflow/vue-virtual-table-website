@@ -1,11 +1,12 @@
 <template>
   <div id="app">
     <div style="width: 1000px;margin: auto;">
+      <a href="https://github.com/waningflow/vue-virtual-table" style="position: fixed;right: 0;top: 0"><img width="149" height="149" src="https://github.blog/wp-content/uploads/2008/12/forkme_right_green_007200.png?resize=149%2C149" class="attachment-full size-full" alt="Fork me on GitHub" data-recalc-dims="1"></a>
       <div style="margin: 20px 0">
         <el-card>
           <el-form :inline="true" class="demo-form-inline"">
             <el-form-item label="Line Nums">
-              <el-input-number v-model="lineNum" controls-position="right" :min="100" :max="20000" :step="100"></el-input-number>
+              <el-input-number v-model="lineNum" controls-position="right" :min="100" :max="200000" :step="100"></el-input-number>
             </el-form-item>
             <el-button @click="genData">Generate Data</el-button>
           </el-form>
@@ -172,7 +173,7 @@
 </template>
 
 <script>
-import VueVirtualTable from './components/vue-virtual-table'
+import VueVirtualTable from 'vue-virtual-table'
 import TestPlain from './components/test-plain.vue'
 
 export default {
@@ -184,7 +185,7 @@ export default {
         {prop: 'user', name: 'User', searchable: true, sortable: true, summary: 'COUNT'},
         {prop: 'age', name: 'Age', numberFilter: true},
         {prop: 'city', name: 'City', filterable: true},
-        {prop: '_action', name: 'Action', actionName: 'actionCommon'}
+        {prop: '_action', name: 'Action', actionName: 'actionCommon'},
       ],
       tableData: [
         {user: 'a1', age: 20, city: 'a'},
@@ -193,7 +194,7 @@ export default {
       ],
       tableAttribute: {
         height: 800,
-        itemHeight: 55,
+        itemHeight: 42,
         minWidth: 1000,
         selectable: true,
         enableExport: true,
@@ -219,6 +220,7 @@ export default {
   },
   mounted(){
     this.genData()
+    this.$ga.page('/')
   },
   methods: {
     updateTableConfig(prop, conf){
