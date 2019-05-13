@@ -193,12 +193,12 @@ export default {
         {user: 'a3', age: 23, city: 'a'}
       ],
       tableAttribute: {
-        height: 800,
+        height: 700,
         itemHeight: 42,
         minWidth: 1000,
-        selectable: true,
-        enableExport: true,
-        bordered: false,
+        selectable: false,
+        enableExport: false,
+        bordered: true,
         hoverHighlight: true,
         language: 'en'
       },
