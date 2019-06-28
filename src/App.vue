@@ -4,7 +4,7 @@
       <a href="https://github.com/waningflow/vue-virtual-table" style="position: fixed;right: 0;top: 0"><img width="149" height="149" src="https://github.blog/wp-content/uploads/2008/12/forkme_right_green_007200.png?resize=149%2C149" class="attachment-full size-full" alt="Fork me on GitHub" data-recalc-dims="1"></a>
       <div style="margin: 20px 0">
         <el-card>
-          <el-form :inline="true" class="demo-form-inline"">
+          <el-form :inline="true" class="demo-form-inline">
             <el-form-item label="Line Nums">
               <el-input-number v-model="lineNum" controls-position="right" :min="100" :max="200000" :step="100"></el-input-number>
             </el-form-item>
